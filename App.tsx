@@ -15,11 +15,13 @@ import HeroLogo from './components/HeroLogo';
 import SystemFooter from './components/SystemFooter';
 import AdminPage from './components/admin/AdminPage';
 import { useTranslation } from './lib/i18n';
+import { useTheme } from './lib/theme';
 
 type Page = 'home' | 'team' | 'news' | 'events' | 'macro' | 'uplink' | 'visuals' | 'partners' | 'community' | 'faq' | 'admin';
 
 const App: React.FC = () => {
   const { t, lang, setLang } = useTranslation();
+  const { isDark, toggleTheme } = useTheme();
   const [time, setTime] = useState<string>(new Date().toLocaleTimeString('en-US', { hour12: false }));
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -114,7 +116,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen h-screen bg-[#D1D5DB] text-[#0F172A] font-mono selection:bg-[#00F0FF] selection:text-black relative flex flex-col overflow-hidden">
+    <div className={`min-h-screen h-screen font-mono selection:bg-[#00F0FF] selection:text-black relative flex flex-col overflow-hidden transition-colors duration-300 ${isDark ? 'bg-[#0B0F1A] text-[#E2E8F0]' : 'bg-[#D1D5DB] text-[#0F172A]'}`}>
       <GridBackground />
 
       {/* Persistent Technical Header */}
@@ -157,6 +159,15 @@ const App: React.FC = () => {
               </button>
             ))}
           </div>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="text-lg px-2 py-1 hover:bg-white/10 transition-all"
+            title={isDark ? 'Light Mode' : 'Dark Mode'}
+          >
+            {isDark ? '☀️' : '🌙'}
+          </button>
 
           <div className="text-right hidden md:block">
             <div className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">{t.nav.localTimestamp}</div>
@@ -214,7 +225,7 @@ const App: React.FC = () => {
         </nav>
 
         {/* Dynamic Viewport Content Area */}
-        <main className="flex-1 overflow-y-auto relative custom-scrollbar bg-black/5 min-h-0">
+        <main className={`flex-1 overflow-y-auto relative custom-scrollbar min-h-0 ${isDark ? 'bg-[#0F172A]/50' : 'bg-black/5'}`}>
           {currentPage === 'home' ? (
             <div className="min-h-full flex flex-col justify-center px-12 md:px-24 py-32 relative">
               {/* Blueprints Decorative Elements */}
@@ -222,14 +233,14 @@ const App: React.FC = () => {
               <div className="absolute top-10 left-20 w-[1px] h-48 bg-[#00F0FF]/30" />
 
               <div className="relative group max-w-5xl">
-                <div className="text-[12px] font-black text-[#0F172A] uppercase tracking-[1em] mb-6 flex items-center gap-4">
-                  <span className="w-12 h-[2px] bg-[#0F172A]"></span>
+                <div className={`text-[12px] font-black uppercase tracking-[1em] mb-6 flex items-center gap-4 ${isDark ? 'text-[#E2E8F0]' : 'text-[#0F172A]'}`}>
+                  <span className={`w-12 h-[2px] ${isDark ? 'bg-[#E2E8F0]' : 'bg-[#0F172A]'}`}></span>
                   {t.home.established}
                 </div>
 
                 <HeroLogo />
 
-                <div className="max-w-2xl text-sm md:text-xl font-bold leading-tight mb-20 text-[#475569] border-l-4 border-[#2563EB] pl-10 py-6 backdrop-blur-md relative">
+                <div className={`max-w-2xl text-sm md:text-xl font-bold leading-tight mb-20 border-l-4 border-[#2563EB] pl-10 py-6 backdrop-blur-md relative ${isDark ? 'text-[#94A3B8]' : 'text-[#475569]'}`}>
                   {t.home.subtitle}
 
                   {/* Corner Brackets */}
