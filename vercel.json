@@ -1,0 +1,13 @@
+{
+    "framework": "vite",
+    "rewrites": [
+        {
+            "source": "/api/cryptopanic",
+            "destination": "/api/cryptopanic"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}

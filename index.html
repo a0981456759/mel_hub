@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEL ChainLab | Armor Tech OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #D1D5DB; /* Armor Grey */
+            color: #0F172A; /* Deep Navy/Black */
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            overflow: hidden; /* Prevents body scroll, use main container scroll */
+        }
+        
+        /* Panel Line Texture */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(37, 99, 235, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.08) 1px, transparent 1px);
+            background-size: 80px 80px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heading-xl {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            line-height: 0.8;
+            color: #0F172A;
+        }
+
+        .armor-panel {
+            background: rgba(229, 231, 235, 0.9);
+            backdrop-filter: blur(4px);
+            border: 2px solid #0F172A;
+            box-shadow: 4px 4px 0px 0px #2563EB;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .armor-panel:hover {
+            box-shadow: 8px 8px 0px 0px #00F0FF;
+            transform: translate(-2px, -2px);
+            border-color: #00F0FF;
+        }
+
+        ::selection {
+            background: #00F0FF;
+            color: #000;
+        }
+
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanline {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to bottom, transparent, rgba(0, 240, 255, 0.05), transparent);
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            animation: scanline 12s linear infinite;
+            z-index: 50;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
+    "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
+    "react/jsx-runtime": "https://esm.sh/react@^19.2.3/jsx-runtime",
+    "framer-motion": "https://esm.sh/framer-motion@^12.0.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div class="scanline"></div>
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>

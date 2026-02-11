@@ -1,0 +1,5 @@
+{
+  "name": "MEL ChainLab Terminal",
+  "description": "A high-fidelity Bloomberg Terminal inspired interface for MEL ChainLab, an inter-collegiate research unit based in Melbourne.",
+  "requestFramePermissions": []
+}
