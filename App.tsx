@@ -9,17 +9,22 @@ import MacroPage from './components/MacroPage';
 import ContactPage from './components/ContactPage';
 import VisualArchivePage from './components/VisualArchivePage';
 import PartnersPage from './components/PartnersPage';
+import CommunityEventsPage from './components/CommunityEventsPage';
+import FAQPage from './components/FAQPage';
 import HeroLogo from './components/HeroLogo';
 import SystemFooter from './components/SystemFooter';
 import AdminPage from './components/admin/AdminPage';
 import { useTranslation } from './lib/i18n';
 
-type Page = 'home' | 'team' | 'news' | 'events' | 'macro' | 'uplink' | 'visuals' | 'partners' | 'admin';
+type Page = 'home' | 'team' | 'news' | 'events' | 'macro' | 'uplink' | 'visuals' | 'partners' | 'community' | 'faq' | 'admin';
 
 const App: React.FC = () => {
   const { t, lang, setLang } = useTranslation();
   const [time, setTime] = useState<string>(new Date().toLocaleTimeString('en-US', { hour12: false }));
   const [currentPage, setCurrentPage] = useState<Page>('home');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [booting, setBooting] = useState(true);
+  const [bootLine, setBootLine] = useState(0);
 
   // Hash-based routing for admin
   useEffect(() => {
@@ -40,29 +45,95 @@ const App: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Boot animation
+  const bootMessages = [
+    'INITIALIZING_CORE_SYSTEMS...',
+    'LOADING_BLOCKCHAIN_MODULES...',
+    'CONNECTING_TO_SUPABASE_DB...',
+    'CALIBRATING_SENTIMENT_FEED...',
+    'SYNCING_PROTOCOL_DATA...',
+    'SYSTEM_READY.',
+  ];
+
+  useEffect(() => {
+    if (!booting) return;
+    const interval = setInterval(() => {
+      setBootLine(prev => {
+        if (prev >= bootMessages.length - 1) {
+          clearInterval(interval);
+          setTimeout(() => setBooting(false), 400);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 300);
+    return () => clearInterval(interval);
+  }, [booting]);
+
+  // Close sidebar on page change (mobile)
+  const handleNav = (page: Page) => {
+    setCurrentPage(page);
+    setSidebarOpen(false);
+    window.location.hash = '';
+  };
+
   const navItems = [
     { label: t.nav.visuals, key: 'visuals', icon: '📸' },
     { label: t.nav.team, key: 'team', icon: '👤' },
     { label: t.nav.sentiment, key: 'news', icon: '🧠' },
     { label: t.nav.intel, key: 'events', icon: '📋' },
     { label: t.nav.macro, key: 'macro', icon: '🌐' },
+    { label: t.nav.community, key: 'community', icon: '🎪' },
     { label: t.nav.partners, key: 'partners', icon: '🤝' },
+    { label: t.nav.faq, key: 'faq', icon: '❓' },
     { label: t.nav.uplink, key: 'uplink', icon: '🛰️' }
   ];
+
+  // Boot screen
+  if (booting) {
+    return (
+      <div className="min-h-screen bg-[#0F172A] flex items-center justify-center font-mono">
+        <div className="max-w-lg w-full px-8">
+          <div className="text-[#00F0FF] text-xs font-black tracking-[0.3em] mb-6 animate-pulse">MEL_OS.v2 // BOOT_SEQUENCE</div>
+          <div className="space-y-2">
+            {bootMessages.slice(0, bootLine + 1).map((msg, i) => (
+              <div key={i} className="flex items-center gap-3 animate-in">
+                <span className={`text-[10px] font-black ${i === bootLine && i < bootMessages.length - 1 ? 'text-[#FACC15]' : i === bootMessages.length - 1 ? 'text-[#22C55E]' : 'text-[#00F0FF]'}`}>
+                  {i === bootLine && i < bootMessages.length - 1 ? '▶' : '✓'}
+                </span>
+                <span className={`text-sm font-bold tracking-wide ${i === bootLine ? 'text-white' : 'text-white/50'}`}>{msg}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 h-1 bg-white/10 overflow-hidden">
+            <div className="h-full bg-[#00F0FF] transition-all duration-300" style={{ width: `${((bootLine + 1) / bootMessages.length) * 100}%` }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen h-screen bg-[#D1D5DB] text-[#0F172A] font-mono selection:bg-[#00F0FF] selection:text-black relative flex flex-col overflow-hidden">
       <GridBackground />
 
       {/* Persistent Technical Header */}
-      <header className="relative z-30 px-8 py-5 flex justify-between items-center bg-[#0F172A] text-white border-b-2 border-[#00F0FF]">
-        <div className="flex items-center gap-6">
+      <header className="relative z-30 px-4 md:px-8 py-4 md:py-5 flex justify-between items-center bg-[#0F172A] text-white border-b-2 border-[#00F0FF]">
+        <div className="flex items-center gap-4 md:gap-6">
+          {/* Mobile Hamburger */}
           <button
-            onClick={() => { setCurrentPage('home'); window.location.hash = ''; }}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="md:hidden text-[#00F0FF] text-2xl font-black p-1"
+          >
+            {sidebarOpen ? '✕' : '☰'}
+          </button>
+
+          <button
+            onClick={() => handleNav('home')}
             className="flex flex-col gap-0 group"
           >
-            <div className="text-[8px] font-black tracking-[0.3em] text-[#00F0FF] uppercase group-hover:animate-pulse">{t.nav.systemHome}</div>
-            <div className="text-3xl font-black italic group-hover:text-[#00F0FF] transition-colors tracking-tighter">MEL_OS.v2</div>
+            <div className="text-[8px] font-black tracking-[0.3em] text-[#00F0FF] uppercase group-hover:animate-pulse hidden md:block">{t.nav.systemHome}</div>
+            <div className="text-xl md:text-3xl font-black italic group-hover:text-[#00F0FF] transition-colors tracking-tighter">MEL_OS.v2</div>
           </button>
           <div className="hidden md:flex h-10 w-[1px] bg-white/20" />
           <div className="hidden md:block text-[10px] font-black text-[#FACC15]">
@@ -70,14 +141,14 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 md:gap-6">
           {/* Language Toggle */}
           <div className="flex items-center border border-[#00F0FF]/40 bg-[#00F0FF]/10">
             {([['en', 'EN'], ['zh-CN', '简'], ['zh-TW', '繁']] as const).map(([code, label]) => (
               <button
                 key={code}
                 onClick={() => setLang(code as any)}
-                className={`px-2.5 py-1.5 text-[11px] font-black uppercase tracking-wider transition-all ${lang === code
+                className={`px-2 md:px-2.5 py-1 md:py-1.5 text-[10px] md:text-[11px] font-black uppercase tracking-wider transition-all ${lang === code
                   ? 'bg-[#00F0FF]/30 text-[#00F0FF]'
                   : 'text-white/40 hover:text-white/70 hover:bg-white/5'
                   }`}
@@ -87,7 +158,7 @@ const App: React.FC = () => {
             ))}
           </div>
 
-          <div className="text-right">
+          <div className="text-right hidden md:block">
             <div className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-1">{t.nav.localTimestamp}</div>
             <div className="text-xl font-black text-[#00F0FF] leading-none tracking-tight">{time}</div>
           </div>
@@ -95,9 +166,14 @@ const App: React.FC = () => {
       </header>
 
       <div className="flex-1 flex relative z-10 overflow-hidden min-h-0">
+        {/* Mobile sidebar overlay */}
+        {sidebarOpen && (
+          <div className="fixed inset-0 bg-black/60 z-30 md:hidden" onClick={() => setSidebarOpen(false)} />
+        )}
+
         {/* Persistent Tactical Sidebar */}
-        <nav className="w-20 md:w-72 bg-[#0F172A] border-r-2 border-[#00F0FF] flex flex-col z-20 shadow-[10px_0_30px_rgba(0,0,0,0.5)] min-h-0">
-          <div className="p-5 border-b border-white/10 hidden md:block">
+        <nav className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:relative w-72 bg-[#0F172A] border-r-2 border-[#00F0FF] flex flex-col z-40 md:z-20 shadow-[10px_0_30px_rgba(0,0,0,0.5)] min-h-0 h-full md:h-auto transition-transform duration-300`}>
+          <div className="p-5 border-b border-white/10">
             <div className="text-[11px] font-black text-[#00F0FF] uppercase mb-2 tracking-wider flex items-center gap-3">
               <span className="w-2 h-2 bg-[#00F0FF] rounded-full animate-pulse shadow-[0_0_5px_#00F0FF]"></span>
               {t.nav.controlPanel}
@@ -108,33 +184,28 @@ const App: React.FC = () => {
             {navItems.map((item) => (
               <button
                 key={item.key}
-                onClick={() => { setCurrentPage(item.key as Page); window.location.hash = ''; }}
-                className={`relative group flex items-center px-5 py-5 md:py-4 transition-all duration-200 border-l-4 ${currentPage === item.key
+                onClick={() => handleNav(item.key as Page)}
+                className={`relative group flex items-center px-5 py-4 transition-all duration-200 border-l-4 ${currentPage === item.key
                   ? 'bg-[#00F0FF]/20 text-[#00F0FF] border-[#00F0FF]'
                   : 'text-white/80 hover:text-white hover:bg-white/10 border-transparent'
                   }`}
               >
-                <span className={`text-xl md:text-lg mr-0 md:mr-4 transition-transform ${currentPage === item.key ? 'scale-110 translate-x-1' : ''}`}>
+                <span className={`text-lg mr-4 transition-transform ${currentPage === item.key ? 'scale-110 translate-x-1' : ''}`}>
                   {item.icon}
                 </span>
-                <span className="hidden md:block text-[13px] font-bold tracking-wide uppercase">
+                <span className="text-[13px] font-bold tracking-wide uppercase">
                   {item.label}
                 </span>
 
                 {currentPage === item.key && (
-                  <span className="hidden md:block ml-auto text-sm animate-pulse">≫</span>
+                  <span className="ml-auto text-sm animate-pulse">≫</span>
                 )}
-
-                {/* Tooltip for mobile */}
-                <div className="md:hidden absolute left-full ml-2 px-2 py-1 bg-[#00F0FF] text-black text-[10px] font-black uppercase opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 shadow-[5px_5px_0px_#000]">
-                  {item.label}
-                </div>
               </button>
             ))}
           </div>
 
           {/* Sidebar Footer Decals */}
-          <div className="p-5 hidden md:block border-t border-white/20">
+          <div className="p-5 border-t border-white/20">
             <div className="text-[11px] font-bold text-white/50 space-y-2">
               <div className="flex justify-between border-b border-white/10 pb-2"><span>{t.nav.auth}</span> <span className="text-[#FACC15]">CMD_ALPHA</span></div>
               <div className="flex justify-between"><span>{t.nav.sig}</span> <span className="font-mono text-white/70">{Math.random().toString(36).substring(7).toUpperCase()}</span></div>
@@ -185,7 +256,7 @@ const App: React.FC = () => {
               <AdminPage />
             </div>
           ) : (
-            <div className="p-10 md:p-20 animate-in">
+            <div key={currentPage} className="p-6 md:p-10 lg:p-20 animate-in">
               {currentPage === 'team' && <TeamPage />}
               {currentPage === 'news' && <SentimentPage />}
               {currentPage === 'events' && <EventPage />}
@@ -193,6 +264,8 @@ const App: React.FC = () => {
               {currentPage === 'uplink' && <ContactPage />}
               {currentPage === 'visuals' && <VisualArchivePage />}
               {currentPage === 'partners' && <PartnersPage />}
+              {currentPage === 'community' && <CommunityEventsPage />}
+              {currentPage === 'faq' && <FAQPage />}
             </div>
           )}
         </main>

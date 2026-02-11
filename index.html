@@ -1,30 +1,52 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>MEL ChainLab | Armor Tech OS</title>
+    <title>MEL ChainLab | Melbourne Blockchain Research Community</title>
+    <meta name="description"
+        content="MEL ChainLab is Melbourne's premier blockchain research community. We explore DeFi protocols, smart contract security, and next-gen on-chain architecture through meetups, workshops, and hackathons.">
+    <meta name="keywords" content="blockchain, crypto, Melbourne, DeFi, Web3, research, community, meetup, hackathon">
+    <meta name="author" content="MEL ChainLab">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MEL ChainLab | Melbourne Blockchain Research Community">
+    <meta property="og:description"
+        content="Melbourne's premier blockchain research community. DeFi protocols, smart contract security, and next-gen on-chain architecture.">
+    <meta property="og:site_name" content="MEL ChainLab">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MEL ChainLab">
+    <meta name="twitter:description" content="Melbourne's premier blockchain research community.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@900&family=JetBrains+Mono:wght@400;700;800&display=swap"
+        rel="stylesheet">
     <style>
         body {
-            background-color: #D1D5DB; /* Armor Grey */
-            color: #0F172A; /* Deep Navy/Black */
+            background-color: #D1D5DB;
+            /* Armor Grey */
+            color: #0F172A;
+            /* Deep Navy/Black */
             font-family: 'JetBrains Mono', monospace;
             margin: 0;
-            overflow: hidden; /* Prevents body scroll, use main container scroll */
+            overflow: hidden;
+            /* Prevents body scroll, use main container scroll */
         }
-        
+
         /* Panel Line Texture */
         body::before {
             content: "";
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
                 linear-gradient(rgba(37, 99, 235, 0.08) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(37, 99, 235, 0.08) 1px, transparent 1px);
             background-size: 80px 80px;
@@ -65,11 +87,17 @@
             writing-mode: vertical-rl;
             text-orientation: mixed;
         }
-        
+
         @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(100%);
+            }
         }
+
         .scanline {
             width: 100%;
             height: 150px;
@@ -82,7 +110,7 @@
             z-index: 50;
         }
     </style>
-<script type="importmap">
+    <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@^19.2.3",
@@ -95,11 +123,13 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="/index.css">
 </head>
+
 <body>
     <div class="scanline"></div>
     <div id="root"></div>
-<script type="module" src="/index.tsx"></script>
+    <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

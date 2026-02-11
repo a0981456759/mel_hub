@@ -2,7 +2,8 @@
 export interface Translations {
     nav: {
         visuals: string; team: string; sentiment: string; intel: string;
-        macro: string; uplink: string; partners: string; systemHome: string; nodeLabel: string;
+        macro: string; uplink: string; partners: string; community: string; faq: string;
+        systemHome: string; nodeLabel: string;
         localTimestamp: string; controlPanel: string; auth: string; sig: string;
     };
     home: {
@@ -73,6 +74,23 @@ export interface Translations {
     };
     footer: {
         home: string; team: string; intel: string;
+        newsletterPlaceholder: string; subscribe: string;
+        subscribeSuccess: string; subscribeFailed: string;
+    };
+    community: {
+        subtitle: string; title: string; loading: string;
+        upcomingLabel: string; scheduled: string; pastEvents: string;
+        completed: string; maxAttendees: string; rsvpBtn: string;
+        rsvpTitle: string; nameLabel: string; namePlaceholder: string;
+        emailLabel: string; emailPlaceholder: string;
+        submitRsvp: string; submitting: string;
+        rsvpSuccess: string; alreadyRegistered: string;
+    };
+    faq: {
+        subtitle: string; title: string;
+        aboutTitle: string; aboutItems: { q: string; a: string }[];
+        cryptoTitle: string; cryptoItems: { q: string; a: string }[];
+        joinTitle: string; joinItems: { q: string; a: string }[];
     };
     common: {
         loading: string; error: string; bullish: string; bearish: string; neutral: string;
@@ -90,6 +108,8 @@ export const en: Translations = {
         macro: 'GLOBAL PARAMETERS',
         uplink: 'ESTABLISH UPLINK',
         partners: 'PARTNERS',
+        community: 'EVENTS',
+        faq: 'FAQ',
         systemHome: 'SYSTEM_HOME',
         nodeLabel: 'NODE:',
         localTimestamp: 'LOCAL_TIMESTAMP',
@@ -258,6 +278,52 @@ export const en: Translations = {
         home: 'HOME',
         team: 'TEAM',
         intel: 'INTEL',
+        newsletterPlaceholder: 'ENTER_EMAIL_ADDRESS',
+        subscribe: 'SUBSCRIBE',
+        subscribeSuccess: 'SUBSCRIBED_SUCCESSFULLY',
+        subscribeFailed: 'SUBSCRIPTION_FAILED',
+    },
+    community: {
+        subtitle: '/// [COMMUNITY_EVENT_DISPATCH] ///',
+        title: 'EVENTS.',
+        loading: 'SCANNING_EVENT_FEEDS',
+        upcomingLabel: 'UPCOMING_OPS',
+        scheduled: 'SCHEDULED',
+        pastEvents: '// ARCHIVED_OPERATIONS',
+        completed: 'COMPLETED',
+        maxAttendees: 'MAX_CAPACITY',
+        rsvpBtn: '[ REGISTER // RSVP ]',
+        rsvpTitle: '// REGISTER_FOR_EVENT',
+        nameLabel: 'CALLSIGN',
+        namePlaceholder: '[ YOUR NAME ]',
+        emailLabel: 'SIGNAL_FREQ',
+        emailPlaceholder: '[ YOUR EMAIL ]',
+        submitRsvp: 'CONFIRM_REGISTRATION',
+        submitting: 'TRANSMITTING...',
+        rsvpSuccess: 'REGISTRATION_CONFIRMED // SEE YOU THERE',
+        alreadyRegistered: 'ALREADY_REGISTERED_FOR_THIS_EVENT',
+    },
+    faq: {
+        subtitle: '/// [KNOWLEDGE_BASE_TERMINAL] ///',
+        title: 'FAQ.',
+        aboutTitle: '// ABOUT_MEL_CHAINLAB',
+        aboutItems: [
+            { q: 'What is MEL ChainLab?', a: 'MEL ChainLab is a Melbourne-based blockchain research community focused on DeFi protocols, smart contract security, and next-gen on-chain architecture. We bring together students, developers, and researchers from across Melbourne.' },
+            { q: 'Who can join?', a: 'Anyone with an interest in blockchain technology! We welcome university students, developers, researchers, and crypto enthusiasts of all skill levels.' },
+            { q: 'Where are you located?', a: 'We are based in Melbourne, Australia. Our meetups and workshops take place at various university campuses and co-working spaces across the city.' },
+        ],
+        cryptoTitle: '// CRYPTO_101',
+        cryptoItems: [
+            { q: 'What is blockchain?', a: 'A blockchain is a distributed, immutable ledger that records transactions across a network of computers. It enables trustless, transparent, and secure data storage without a central authority.' },
+            { q: 'What is DeFi?', a: 'Decentralized Finance (DeFi) refers to financial services built on blockchain protocols. It includes lending, borrowing, trading, and yield farming — all without traditional banks or intermediaries.' },
+            { q: 'What are smart contracts?', a: 'Smart contracts are self-executing programs stored on a blockchain. They automatically enforce the terms of an agreement when predefined conditions are met, eliminating the need for trusted intermediaries.' },
+        ],
+        joinTitle: '// HOW_TO_JOIN',
+        joinItems: [
+            { q: 'How do I join MEL ChainLab?', a: 'Join our Discord server through the ESTABLISH UPLINK page, or attend one of our public meetups. No prior blockchain experience required!' },
+            { q: 'Are events free?', a: 'Most of our meetups and workshops are completely free. Hackathons may have a small registration fee to cover venue and prizes.' },
+            { q: 'Can I contribute to research?', a: 'Absolutely! We welcome contributions from all members. You can write research reports, present at meetups, or collaborate on projects through our Intelligence page.' },
+        ],
     },
     common: {
         loading: 'LOADING...',

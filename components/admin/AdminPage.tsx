@@ -3,7 +3,7 @@ import { supabase } from '../../lib/supabase';
 import AdminLogin from './AdminLogin';
 import AdminTable, { TableConfig } from './AdminTable';
 
-type AdminTab = 'team' | 'news' | 'events' | 'macro' | 'gallery' | 'reports' | 'archive' | 'stats' | 'submissions' | 'sentiment';
+type AdminTab = 'team' | 'news' | 'events' | 'macro' | 'gallery' | 'reports' | 'archive' | 'stats' | 'submissions' | 'sentiment' | 'community' | 'newsletter';
 
 const tableConfigs: Record<AdminTab, TableConfig> = {
   team: {
@@ -221,12 +221,52 @@ const tableConfigs: Record<AdminTab, TableConfig> = {
       { key: 'signal', label: 'SIGNAL', type: 'select', options: ['BULLISH', 'BEARISH', 'NEUTRAL'] },
     ],
   },
+  community: {
+    tableName: 'community_events',
+    label: 'COMMUNITY_EVENTS',
+    orderBy: 'event_date',
+    displayColumns: [
+      { key: 'id', label: 'ID' },
+      { key: 'title', label: 'TITLE' },
+      { key: 'event_type', label: 'TYPE' },
+      { key: 'event_date', label: 'DATE', render: (v: string) => v ? new Date(v).toLocaleDateString() : '' },
+      { key: 'location', label: 'LOCATION' },
+      { key: 'is_active', label: 'ACTIVE' },
+    ],
+    fields: [
+      { key: 'id', label: 'ID', type: 'text', required: true },
+      { key: 'title', label: 'TITLE', type: 'text', required: true },
+      { key: 'description', label: 'DESCRIPTION', type: 'textarea', required: true },
+      { key: 'event_type', label: 'TYPE', type: 'select', options: ['meetup', 'workshop', 'hackathon'], required: true },
+      { key: 'event_date', label: 'DATE (ISO)', type: 'text', required: true },
+      { key: 'location', label: 'LOCATION', type: 'text', required: true },
+      { key: 'max_attendees', label: 'MAX_ATTENDEES', type: 'number' },
+      { key: 'image_url', label: 'IMAGE_URL', type: 'text' },
+      { key: 'is_active', label: 'IS_ACTIVE', type: 'select', options: ['true', 'false'] },
+      { key: 'sort_order', label: 'SORT_ORDER', type: 'number' },
+    ],
+    mapFromDb: (row) => ({ ...row, is_active: String(row.is_active) }),
+    mapToDb: (data) => ({ ...data, is_active: data.is_active === 'true', max_attendees: Number(data.max_attendees) || 50 }),
+  },
+  newsletter: {
+    tableName: 'newsletter_subscribers',
+    label: 'NEWSLETTER_SUBS',
+    orderBy: 'subscribed_at',
+    readOnly: true,
+    displayColumns: [
+      { key: 'id', label: 'ID', render: (v: string) => v?.substring(0, 8) + '...' },
+      { key: 'email', label: 'EMAIL' },
+      { key: 'subscribed_at', label: 'DATE', render: (v: string) => v ? new Date(v).toLocaleDateString() : '' },
+    ],
+    fields: [],
+  },
 };
 
 const tabs: { key: AdminTab; label: string }[] = [
   { key: 'team', label: 'TEAM' },
   { key: 'news', label: 'NEWS' },
   { key: 'events', label: 'EVENTS' },
+  { key: 'community', label: 'COMMUNITY' },
   { key: 'macro', label: 'MACRO' },
   { key: 'gallery', label: 'GALLERY' },
   { key: 'reports', label: 'REPORTS' },
@@ -234,6 +274,7 @@ const tabs: { key: AdminTab; label: string }[] = [
   { key: 'stats', label: 'STATS' },
   { key: 'submissions', label: 'INBOX' },
   { key: 'sentiment', label: 'SENTIMENT' },
+  { key: 'newsletter', label: 'NEWSLETTER' },
 ];
 
 const AdminPage: React.FC = () => {
@@ -296,8 +337,8 @@ const AdminPage: React.FC = () => {
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
             className={`px-4 py-2 text-[10px] font-black uppercase tracking-tighter transition-all ${activeTab === tab.key
-                ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,240,255,0.4)]'
-                : 'text-slate-400 hover:text-white hover:bg-white/5'
+              ? 'bg-cyan-500 text-black shadow-[0_0_15px_rgba(0,240,255,0.4)]'
+              : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
           >
             {tab.label}
